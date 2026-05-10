@@ -25,7 +25,7 @@ class TransaksiView extends GetView<TransaksiController> {
     return Column(
       children: [
         // Topbar
-        CustomHeader(title: 'Riwayat Transaksi'),
+        CustomHeader(title: 'Riwayat Untuk transaksi'),
 
         Expanded(
           child: SingleChildScrollView(
