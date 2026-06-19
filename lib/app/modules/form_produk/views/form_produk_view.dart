@@ -525,50 +525,7 @@ class FormProdukView extends GetView<FormProdukController> {
     );
   }
 
-  Widget _buildTipsCard() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppTheme.border),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text(
-            '💡 Tips Pengisian',
-            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-          ),
-          SizedBox(height: 12),
-          _TipItem(
-            icon: '📝',
-            text:
-                'Nama produk sebaiknya spesifik\ncontoh: "Ganci Bunga Merah" bukan cuma "Ganci"',
-          ),
-          SizedBox(height: 10),
-          _TipItem(
-            icon: '💰',
-            text:
-                'Isi harga dalam Rupiah tanpa titik\ncontoh: 10000 bukan 10.000',
-          ),
-          SizedBox(height: 10),
-          _TipItem(
-            icon: '🔗',
-            text:
-                'URL foto bisa dari Google Images\nKlik kanan gambar → Copy image address',
-          ),
-          SizedBox(height: 10),
-          _TipItem(
-            icon: '📦',
-            text:
-                'Stok akan otomatis berkurang setiap kali produk terjual di kasir',
-          ),
-        ],
-      ),
-    );
-  }
-
+  
   // ═══════════════════════════════════
   // HELPER WIDGETS
   // ═══════════════════════════════════

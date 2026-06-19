@@ -165,57 +165,7 @@ class ProdukView extends GetView<ProdukController> {
     );
   }
 
-  // Widget satu stat card (Hapus Expanded internal agar tidak error di dalam Column)
-  Widget _statCard({
-    required String label,
-    required String value,
-    required String sub,
-    required String icon,
-    Color? valueColor,
-  }) {
-    return Container(
-      width: double.infinity, // Memaksa kartu memenuhi lebar panel kanan
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppTheme.border),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: AppTheme.textSecondary,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  value,
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    color: valueColor ?? AppTheme.textPrimary,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  sub,
-                  style: const TextStyle(fontSize: 12, color: AppTheme.primary),
-                ),
-              ],
-            ),
-          ),
-          Text(icon, style: const TextStyle(fontSize: 28)),
-        ],
-      ),
-    );
-  }
+  
 
   // ═══════════════════════════════════
   // SECTION PRODUK (filter + grid)
