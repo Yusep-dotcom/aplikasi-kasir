@@ -222,7 +222,7 @@ class KasirController extends GetxController {
 
       // Tampilkan dialog dengan nilai yang sudah disimpan
       Get.defaultDialog(
-        title: 'Transaksi Berhasil! 🎉',
+        title: 'Transaksi Berhasil',
         middleText:
             'Total: ${CurrencyFormatter.format(totalFinal)}\n'
             'Metode: $metodeFinal\n\n'

@@ -49,8 +49,6 @@ class LaporanView extends GetView<LaporanController> {
               padding: const EdgeInsets.all(24),
               child: Column(
                 children: [
-                  _buildStatCards(),
-                  const SizedBox(height: 20),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

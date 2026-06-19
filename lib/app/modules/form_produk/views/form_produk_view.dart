@@ -525,7 +525,6 @@ class FormProdukView extends GetView<FormProdukController> {
     );
   }
 
-  
   // ═══════════════════════════════════
   // HELPER WIDGETS
   // ═══════════════════════════════════
@@ -625,5 +624,3 @@ class FormProdukView extends GetView<FormProdukController> {
   }
 }
 
-// Widget item tips — dipisah jadi class sendiri
-// karena dipakai berulang
