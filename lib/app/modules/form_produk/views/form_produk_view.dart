@@ -627,29 +627,3 @@ class FormProdukView extends GetView<FormProdukController> {
 
 // Widget item tips — dipisah jadi class sendiri
 // karena dipakai berulang
-class _TipItem extends StatelessWidget {
-  final String icon;
-  final String text;
-  const _TipItem({required this.icon, required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(icon, style: const TextStyle(fontSize: 14)),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Text(
-            text,
-            style: const TextStyle(
-              fontSize: 12,
-              color: AppTheme.textSecondary,
-              height: 1.5,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
