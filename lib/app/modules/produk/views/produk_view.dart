@@ -95,21 +95,21 @@ class ProdukView extends GetView<ProdukController> {
             const SizedBox(height: 24),
 
             // Baris 1: Total Produk
-            _rowInfoItem(
+            rowInfoItem(
               label: 'Total Produk',
               value: controller.totalProduk.toString(),
             ),
             const Divider(height: 32, color: AppTheme.border),
 
             // Baris 2: Total Stok
-            _rowInfoItem(
+            rowInfoItem(
               label: 'Total Stok',
               value: controller.totalStok.toString(),
             ),
             const Divider(height: 32, color: AppTheme.border),
 
             // Baris 3: Stok Menipis
-            _rowInfoItem(
+            rowInfoItem(
               label: 'Stok Menipis',
               value: controller.produkMenipis.toString(),
 
@@ -120,7 +120,7 @@ class ProdukView extends GetView<ProdukController> {
             const Divider(height: 32, color: AppTheme.border),
 
             // Baris 4: Stok Habis
-            _rowInfoItem(
+            rowInfoItem(
               label: 'Stok Habis',
               value: controller.produkHabis.toString(),
 
@@ -135,7 +135,7 @@ class ProdukView extends GetView<ProdukController> {
   }
 
   // Widget baris informasi di dalam card utama
-  Widget _rowInfoItem({
+  Widget rowInfoItem({
     required String label,
     required String value,
 

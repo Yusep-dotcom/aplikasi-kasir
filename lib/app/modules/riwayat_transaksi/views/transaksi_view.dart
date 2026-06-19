@@ -95,31 +95,18 @@ class TransaksiView extends GetView<TransaksiController> {
           children: [
             const Text(
               'Ringkasan Transaksi',
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w700,
-              ),
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 12),
-            const Divider(color: AppTheme.border),
             const SizedBox(height: 12),
-            _summaryRow(
-              label: 'Total Transaksi',
-              value: '$totalTrx',
-              subtitle: '+3 dari kemarin',
-            ),
+            _summaryRow(label: 'Total Transaksi', value: '$totalTrx'),
             const SizedBox(height: 16),
             _summaryRow(
               label: 'Total Pendapatan',
               value: controller.formatHarga(totalPendapatan),
-              subtitle: 'Semua metode pembayaran',
             ),
             const SizedBox(height: 16),
-            _summaryRow(
-              label: 'Item Terjual',
-              value: '$totalItem',
-              subtitle: 'Unit dibeli',
-            ),
+            _summaryRow(label: 'Item Terjual', value: '$totalItem'),
           ],
         ),
       );
@@ -129,39 +116,21 @@ class TransaksiView extends GetView<TransaksiController> {
   Widget _summaryRow({
     required String label,
     required String value,
-    required String subtitle,
+    Color? valueColor,
   }) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                label,
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: AppTheme.textSecondary,
-                ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                value,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                subtitle,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: AppTheme.primary,
-                ),
-              ),
-            ],
+        Text(
+          label,
+          style: const TextStyle(fontSize: 13, color: AppTheme.textPrimary),
+        ),
+        const Spacer(),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: valueColor ?? AppTheme.textPrimary,
           ),
         ),
       ],
