@@ -61,22 +61,21 @@ class TransaksiView extends GetView<TransaksiController> {
 
       return Row(
         children: [
-          _statCard('Transaksi', '$totalTrx', '+3 dari kemarin', '📋'),
+          _statCard('Transaksi', '$totalTrx', '+3 dari kemarin'),
           const SizedBox(width: 16),
           _statCard(
             'Pendapatan',
             controller.formatHarga(totalPendapatan),
             'Total keseluruhan',
-            '💰',
           ),
           const SizedBox(width: 16),
-          _statCard('Item Terjual', '$totalItem', 'Unit terjual', '🛍️'),
+          _statCard('Item Terjual', '$totalItem', 'Unit terjual'),
         ],
       );
     });
   }
 
-  Widget _statCard(String label, String value, String sub, String icon) {
+  Widget _statCard(String label, String value, String sub) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.all(20),
@@ -117,7 +116,6 @@ class TransaksiView extends GetView<TransaksiController> {
                 ],
               ),
             ),
-            Text(icon, style: const TextStyle(fontSize: 32)),
           ],
         ),
       ),
@@ -667,10 +665,6 @@ class TransaksiView extends GetView<TransaksiController> {
       case 'cash':
         bg = const Color(0xFFE1F5EE);
         text = const Color(0xFF085041);
-        break;
-      case 'transfer':
-        bg = const Color(0xFFE6F1FB);
-        text = const Color(0xFF0C447C);
         break;
       case 'qris':
         bg = const Color(0xFFEEEDFE);

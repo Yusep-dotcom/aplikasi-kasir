@@ -12,7 +12,7 @@ class TransaksiController extends GetxController {
   var filterMetode = 'Semua'.obs;
   var filterStatus = 'Semua'.obs;
 
-  final List<String> metodeOptions = ['Semua', 'Cash', 'Transfer', 'Qris'];
+  final List<String> metodeOptions = ['Semua', 'Cash', 'Qris'];
   final List<String> statusOptions = ['Semua', 'selesai', 'batal'];
 
   final periodeOptions = [
@@ -45,20 +45,17 @@ class TransaksiController extends GetxController {
 
     // 🔥 FILTER TANGGAL (WAJIB pakai Timestamp)
     query = query
-        .where('createdAt',
-            isGreaterThanOrEqualTo: Timestamp.fromDate(start))
+        .where('createdAt', isGreaterThanOrEqualTo: Timestamp.fromDate(start))
         .where('createdAt', isLessThanOrEqualTo: Timestamp.fromDate(end));
 
     // 🔥 FILTER METODE
     if (filterMetode.value != 'Semua') {
-      query = query.where('paymentMethod',
-          isEqualTo: filterMetode.value);
+      query = query.where('paymentMethod', isEqualTo: filterMetode.value);
     }
 
     // 🔥 FILTER STATUS
     if (filterStatus.value != 'Semua') {
-      query = query.where('status',
-          isEqualTo: filterStatus.value);
+      query = query.where('status', isEqualTo: filterStatus.value);
     }
 
     query = query.orderBy('createdAt', descending: true);
@@ -91,28 +88,34 @@ class TransaksiController extends GetxController {
 
     switch (value) {
       case 'Hari ini':
-        selectedStartDate.value =
-            DateTime(now.year, now.month, now.day);
+        selectedStartDate.value = DateTime(now.year, now.month, now.day);
         selectedEndDate.value = now;
         break;
 
       case 'Kemarin':
         final yesterday = now.subtract(const Duration(days: 1));
         selectedStartDate.value = DateTime(
-            yesterday.year, yesterday.month, yesterday.day);
+          yesterday.year,
+          yesterday.month,
+          yesterday.day,
+        );
         selectedEndDate.value = DateTime(
-            yesterday.year, yesterday.month, yesterday.day, 23, 59, 59);
+          yesterday.year,
+          yesterday.month,
+          yesterday.day,
+          23,
+          59,
+          59,
+        );
         break;
 
       case '7 Hari Terakhir':
-        selectedStartDate.value =
-            now.subtract(const Duration(days: 6));
+        selectedStartDate.value = now.subtract(const Duration(days: 6));
         selectedEndDate.value = now;
         break;
 
       case 'Bulan ini':
-        selectedStartDate.value =
-            DateTime(now.year, now.month, 1);
+        selectedStartDate.value = DateTime(now.year, now.month, 1);
         selectedEndDate.value = now;
         break;
 
@@ -149,8 +152,18 @@ class TransaksiController extends GetxController {
     final dt = (timestamp as Timestamp).toDate();
     final hari = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'];
     final bln = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
-      'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'Mei',
+      'Jun',
+      'Jul',
+      'Agu',
+      'Sep',
+      'Okt',
+      'Nov',
+      'Des',
     ];
     return '${hari[dt.weekday - 1]}, ${dt.day} ${bln[dt.month - 1]} ${dt.year} — '
         '${dt.hour.toString().padLeft(2, '0')}:'

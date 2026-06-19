@@ -364,7 +364,7 @@ class ProdukView extends GetView<ProdukController> {
           // biarkan parent (SingleChildScrollView) yang scroll
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4,
+            crossAxisCount: 5,
             // crossAxisCount = jumlah kolom
             crossAxisSpacing: 12,
             mainAxisSpacing: 12,
@@ -467,7 +467,7 @@ class ProdukView extends GetView<ProdukController> {
                 Text(
                   product.name,
                   style: const TextStyle(
-                    fontSize: 12,
+                    fontSize: 14,
                     fontWeight: FontWeight.w600,
                   ),
                   maxLines: 1,
@@ -479,14 +479,14 @@ class ProdukView extends GetView<ProdukController> {
                 // Kategori
                 Text(
                   product.category,
-                  style: const TextStyle(fontSize: 10, color: AppTheme.primary),
+                  style: const TextStyle(fontSize: 14, color: AppTheme.primary),
                 ),
                 const SizedBox(height: 4),
                 // Harga
                 Text(
                   CurrencyFormatter.format(product.price),
                   style: const TextStyle(
-                    fontSize: 13,
+                    fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: AppTheme.textPrimary,
                   ),

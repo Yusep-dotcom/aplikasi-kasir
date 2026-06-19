@@ -49,7 +49,7 @@ class KasirController extends GetxController {
   ];
 
   // Daftar metode pembayaran
-  final List<String> paymentMethods = ['Cash', 'Transfer', 'Qris'];
+  final List<String> paymentMethods = ['Cash', 'Qris'];
 
   @override
   void onInit() {

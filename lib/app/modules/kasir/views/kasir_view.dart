@@ -172,10 +172,10 @@ class KasirView extends GetView<KasirController> {
             return GridView.builder(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3, // 3 kolom
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 0.85, // tinggi kartu
+                crossAxisCount: 4, // 3 kolom
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 0.9, // tinggi kartu
               ),
               itemCount: list.length,
               itemBuilder: (context, index) {
@@ -254,17 +254,17 @@ class KasirView extends GetView<KasirController> {
             ),
             // Info produk
             Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.fromLTRB(6, 6, 6, 4),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     product.name,
                     style: const TextStyle(
-                      fontSize: 11,
+                      fontSize: 14,
                       fontWeight: FontWeight.w600,
                     ),
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 2),
@@ -272,9 +272,9 @@ class KasirView extends GetView<KasirController> {
                   Text(
                     CurrencyFormatter.format(product.price),
                     style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: AppTheme.primary,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: AppTheme.textPrimary,
                     ),
                   ),
                 ],
