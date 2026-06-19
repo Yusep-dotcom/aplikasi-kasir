@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  // Warna utama aplikasi kasir — merah bata
+  // Warna utama aplikasi kasir — biru tua
   // Dipakai di navbar, tombol utama, header
-  static const Color primary = Color(0xFF7D2A2A);
+  static const Color primary = Color(0xFF1E3A5F);
   static const Color primaryDark = Color.fromARGB(255, 0, 0, 0);
   static const Color primaryLight = Color.fromARGB(255, 255, 255, 255);
 
