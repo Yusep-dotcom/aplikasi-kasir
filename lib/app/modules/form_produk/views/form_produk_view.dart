@@ -46,7 +46,6 @@ class FormProdukView extends GetView<FormProdukController> {
   // ═══════════════════════════════════
   // TOPBAR
   // ═══════════════════════════════════
- 
 
   // ═══════════════════════════════════
   // FORM UTAMA
@@ -248,38 +247,7 @@ class FormProdukView extends GetView<FormProdukController> {
               const Expanded(child: SizedBox()),
             ],
           ),
-          const SizedBox(height: 16),
 
-          // ── URL FOTO PRODUK ──
-          _label('URL Foto Produk'),
-          TextField(
-            controller: controller.imageUrlController,
-            style: const TextStyle(fontSize: 13),
-            // onSubmitted = dipanggil saat user tekan Enter
-            onSubmitted: controller.onImageUrlSubmitted,
-            // onChanged = dipanggil setiap ketik 1 huruf
-            // kita pakai onChanged supaya preview update realtime
-            onChanged: controller.onImageUrlSubmitted,
-            decoration:
-                _inputDecoration(
-                  hint: 'https://contoh.com/foto-produk.jpg',
-                ).copyWith(
-                  // copyWith = salin decoration lama + ubah properti tertentu
-                  suffixIcon: const Padding(
-                    padding: EdgeInsets.only(right: 10),
-                    child: Icon(
-                      Icons.link,
-                      size: 18,
-                      color: AppTheme.textSecondary,
-                    ),
-                  ),
-                ),
-          ),
-          const SizedBox(height: 4),
-          const Text(
-            'Paste URL gambar dari internet. Kosongkan jika tidak ada foto.',
-            style: TextStyle(fontSize: 11, color: AppTheme.textSecondary),
-          ),
           const SizedBox(height: 16),
 
           // ── DESKRIPSI ──
@@ -304,21 +272,23 @@ class FormProdukView extends GetView<FormProdukController> {
           // ── TOMBOL AKSI ──
           Row(
             children: [
-              // Tombol Batal
-              OutlinedButton(
+              // Tombol Kembali
+              OutlinedButton.icon(
                 onPressed: () => Get.back(),
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: AppTheme.textSecondary,
-                  side: const BorderSide(color: AppTheme.border),
+                  backgroundColor: AppTheme.error,
+                  foregroundColor: AppTheme.bgSecondary,
+                  side: const BorderSide(color: Colors.white),
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
+                    horizontal: 16,
                     vertical: 12,
                   ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: const Text('Batal'),
+                icon: const Icon(Icons.arrow_back, size: 18),
+                label: const Text('Kembali'),
               ),
               const SizedBox(width: 12),
               // Tombol Reset (mode tambah saja)
@@ -394,8 +364,8 @@ class FormProdukView extends GetView<FormProdukController> {
         // Preview kartu produk
         _buildPreviewCard(),
         const SizedBox(height: 16),
+
         // Tips pengisian
-        _buildTipsCard(),
       ],
     );
   }

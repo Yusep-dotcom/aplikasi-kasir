@@ -1,9 +1,9 @@
 import 'package:aplikasi_kasir/app/core/widgets/app_navbar.dart';
+import 'package:aplikasi_kasir/app/core/widgets/costum_header.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/transaksi_controller.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/costum_header.dart';
 
 class TransaksiView extends GetView<TransaksiController> {
   const TransaksiView({super.key});
@@ -24,22 +24,45 @@ class TransaksiView extends GetView<TransaksiController> {
   Widget _buildBody() {
     return Column(
       children: [
-        // Topbar
-        CustomHeader(title: 'Riwayat Untuk transaksi'),
+        // Topbar tetap berada di paling atas melintasi area konten utama
+        CustomHeader(title: 'Riwayat Transaksi'),
 
         Expanded(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Stat cards
-                _buildStatCards(),
-                const SizedBox(height: 24),
-                // Filter + Tabel
-                _buildTableSection(),
-              ],
-            ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // ==========================================
+              // KIRI: Daftar Tabel Transaksi (Lebih Luas)
+              // ==========================================
+              Expanded(
+                flex: 3, // Mengambil porsi ruang lebih besar untuk tabel
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.only(
+                    left: 24,
+                    top: 24,
+                    bottom: 24,
+                    right: 12,
+                  ),
+                  child: _buildTableSection(),
+                ),
+              ),
+
+              // ==========================================
+              // KANAN: Kolom Stat Cards (Disusun Vertikal)
+              // ==========================================
+              Expanded(
+                flex: 1, // Mengambil porsi ruang lebih kecil di sisi kanan
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.only(
+                    left: 12,
+                    top: 24,
+                    bottom: 24,
+                    right: 24,
+                  ),
+                  child: _buildStatCards(),
+                ),
+              ),
+            ],
           ),
         ),
       ],
@@ -59,66 +82,89 @@ class TransaksiView extends GetView<TransaksiController> {
         (sum, t) => sum + controller.totalItemCount(t['items'] ?? []),
       );
 
-      return Row(
-        children: [
-          _statCard('Transaksi', '$totalTrx', '+3 dari kemarin'),
-          const SizedBox(width: 16),
-          _statCard(
-            'Pendapatan',
-            controller.formatHarga(totalPendapatan),
-            'Total keseluruhan',
-          ),
-          const SizedBox(width: 16),
-          _statCard('Item Terjual', '$totalItem', 'Unit terjual'),
-        ],
-      );
-    });
-  }
-
-  Widget _statCard(String label, String value, String sub) {
-    return Expanded(
-      child: Container(
+      return Container(
+        width: double.infinity,
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(color: AppTheme.border),
         ),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    label,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: AppTheme.textSecondary,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    value,
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    sub,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: AppTheme.primary,
-                    ),
-                  ),
-                ],
+            const Text(
+              'Ringkasan Transaksi',
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
               ),
+            ),
+            const SizedBox(height: 12),
+            const Divider(color: AppTheme.border),
+            const SizedBox(height: 12),
+            _summaryRow(
+              label: 'Total Transaksi',
+              value: '$totalTrx',
+              subtitle: '+3 dari kemarin',
+            ),
+            const SizedBox(height: 16),
+            _summaryRow(
+              label: 'Total Pendapatan',
+              value: controller.formatHarga(totalPendapatan),
+              subtitle: 'Semua metode pembayaran',
+            ),
+            const SizedBox(height: 16),
+            _summaryRow(
+              label: 'Item Terjual',
+              value: '$totalItem',
+              subtitle: 'Unit dibeli',
             ),
           ],
         ),
-      ),
+      );
+    });
+  }
+
+  Widget _summaryRow({
+    required String label,
+    required String value,
+    required String subtitle,
+  }) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: AppTheme.textSecondary,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                value,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                subtitle,
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: AppTheme.primary,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -241,7 +287,6 @@ class TransaksiView extends GetView<TransaksiController> {
                   ),
                   child: Row(
                     children: [
-                      // ID
                       Expanded(
                         flex: 2,
                         child: Text(
@@ -253,7 +298,6 @@ class TransaksiView extends GetView<TransaksiController> {
                           ),
                         ),
                       ),
-                      // Tanggal
                       Expanded(
                         flex: 3,
                         child: Text(
@@ -261,7 +305,6 @@ class TransaksiView extends GetView<TransaksiController> {
                           style: const TextStyle(fontSize: 12),
                         ),
                       ),
-                      // Item
                       Expanded(
                         flex: 1,
                         child: Text(
@@ -269,7 +312,6 @@ class TransaksiView extends GetView<TransaksiController> {
                           style: const TextStyle(fontSize: 12),
                         ),
                       ),
-                      // Total
                       Expanded(
                         flex: 2,
                         child: Text(
@@ -280,14 +322,11 @@ class TransaksiView extends GetView<TransaksiController> {
                           ),
                         ),
                       ),
-                      // Metode
                       Expanded(
                         flex: 2,
                         child: _metodeBadge(t['paymentMethod'] ?? ''),
                       ),
-                      // Status
                       Expanded(flex: 2, child: _statusBadge(isSelesai)),
-                      // Kasir
                       Expanded(
                         flex: 1,
                         child: Text(
@@ -295,7 +334,6 @@ class TransaksiView extends GetView<TransaksiController> {
                           style: const TextStyle(fontSize: 12),
                         ),
                       ),
-                      // Aksi
                       Expanded(
                         flex: 2,
                         child: _actionBtn(
@@ -327,9 +365,7 @@ class TransaksiView extends GetView<TransaksiController> {
       ),
       builder: (context, child) => Theme(
         data: Theme.of(context).copyWith(
-          colorScheme: const ColorScheme.light(
-            primary: AppTheme.primary, // warna header & tombol OK
-          ),
+          colorScheme: const ColorScheme.light(primary: AppTheme.primary),
         ),
         child: child!,
       ),
@@ -339,8 +375,6 @@ class TransaksiView extends GetView<TransaksiController> {
       controller.setCustomDate(picked.start, picked.end);
     }
   }
-
-  // TAMBAHKAN dua fungsi ini sebelum _filterDropdown():
 
   void _showDetailDialog(Map<String, dynamic> t) {
     final items = t['items'] as List? ?? [];
@@ -356,7 +390,6 @@ class TransaksiView extends GetView<TransaksiController> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header
               Row(
                 children: [
                   Column(
@@ -386,10 +419,7 @@ class TransaksiView extends GetView<TransaksiController> {
                   ),
                 ],
               ),
-
               const Divider(height: 24),
-
-              // Info grid: tanggal, kasir, metode
               Row(
                 children: [
                   _infoBox('Tanggal', controller.formatTanggal(t['createdAt'])),
@@ -399,16 +429,12 @@ class TransaksiView extends GetView<TransaksiController> {
                   _infoBox('Metode', t['paymentMethod'] ?? '-'),
                 ],
               ),
-
               const SizedBox(height: 20),
-
               const Text(
                 'Item Dibeli',
                 style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 10),
-
-              // Tabel item
               Container(
                 decoration: BoxDecoration(
                   border: Border.all(color: AppTheme.border),
@@ -416,7 +442,6 @@ class TransaksiView extends GetView<TransaksiController> {
                 ),
                 child: Column(
                   children: [
-                    // Header tabel
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 14,
@@ -479,8 +504,6 @@ class TransaksiView extends GetView<TransaksiController> {
                         ],
                       ),
                     ),
-
-                    // Baris tiap item
                     ...items.asMap().entries.map((e) {
                       final i = e.key;
                       final item = e.value as Map;
@@ -502,7 +525,6 @@ class TransaksiView extends GetView<TransaksiController> {
                                   : Colors.transparent,
                             ),
                           ),
-                          // Bulatkan pojok bawah untuk item terakhir
                           borderRadius: i == items.length - 1
                               ? const BorderRadius.vertical(
                                   bottom: Radius.circular(8),
@@ -554,10 +576,7 @@ class TransaksiView extends GetView<TransaksiController> {
                   ],
                 ),
               ),
-
               const SizedBox(height: 16),
-
-              // Total bayar
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -575,10 +594,7 @@ class TransaksiView extends GetView<TransaksiController> {
                   ),
                 ],
               ),
-
               const SizedBox(height: 20),
-
-              // Tombol tutup
               SizedBox(
                 width: double.infinity,
                 height: 44,
@@ -731,7 +747,6 @@ class TransaksiView extends GetView<TransaksiController> {
   }
 }
 
-// Widget header kolom tabel
 class _THeader extends StatelessWidget {
   final String text;
   final int flex;

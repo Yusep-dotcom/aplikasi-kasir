@@ -17,8 +17,8 @@ import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/produk/bindings/produk_binding.dart';
 import '../modules/produk/views/produk_view.dart';
-import '../modules/transaksi/bindings/transaksi_binding.dart';
-import '../modules/transaksi/views/transaksi_view.dart';
+import '../modules/riwayat_transaksi/bindings/transaksi_binding.dart';
+import '../modules/riwayat_transaksi/views/transaksi_view.dart';
 
 part 'app_routes.dart';
 

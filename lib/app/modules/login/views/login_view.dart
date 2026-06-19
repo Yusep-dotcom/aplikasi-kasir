@@ -204,6 +204,7 @@ class LoginView extends GetView<LoginController> {
       controller: controller,
       keyboardType: keyboardType,
       obscureText: isPassword && !isPasswordVisible,
+      autofocus: true,
       // obscureText = sembunyikan teks jadi ***
       style: const TextStyle(fontSize: 14),
       decoration: InputDecoration(

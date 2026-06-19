@@ -16,9 +16,10 @@ class ProdukView extends GetView<ProdukController> {
       backgroundColor: AppTheme.bgMain,
       body: Row(
         children: [
-          // Navbar kiri — aktif di menu Produk
+          // Navbar kiri — tetap aktif di menu Produk
           AppNavbar(activePage: NavPage.produk),
-          // Konten utama
+
+          // Konten utama (Topbar + area bawahnya)
           Expanded(child: _buildBody()),
         ],
       ),
@@ -28,20 +29,33 @@ class ProdukView extends GetView<ProdukController> {
   Widget _buildBody() {
     return Column(
       children: [
-        // Topbar
+        // Topbar tetap memanjang di atas
         CustomHeader(title: 'Manajemen Produk'),
-        // Konten scroll
+
+        // Membagi konten bawah menjadi Grid (Kiri) dan Info Ringkasan (Kanan)
         Expanded(
-          child: SingleChildScrollView(
+          child: Padding(
             padding: const EdgeInsets.all(24),
-            child: Column(
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Stat cards — ringkasan angka produk
-                _buildStatCards(),
-                const SizedBox(height: 24),
-                // Tabel/grid produk
-                _buildProdukSection(),
+                // ==========================================
+                // SISI KIRI: Filter dan Grid Utama Produk
+                // ==========================================
+                Expanded(
+                  flex: 7, // Mengambil porsi 70% lebar layar
+                  child: SingleChildScrollView(child: _buildProdukSection()),
+                ),
+
+                const SizedBox(width: 24),
+
+                // ==========================================
+                // SISI KANAN: Panel Informasi Ringkasan (Stat Cards)
+                // ==========================================
+                Expanded(
+                  flex: 3, // Mengambil porsi 30% lebar layar
+                  child: SingleChildScrollView(child: _buildRightInfoPanel()),
+                ),
               ],
             ),
           ),
@@ -51,61 +65,107 @@ class ProdukView extends GetView<ProdukController> {
   }
 
   // ═══════════════════════════════════
-  // TOPBAR
+  // PANEL INFORMASI KANAN (Ubah Row jadi Column)
   // ═══════════════════════════════════
-
   // ═══════════════════════════════════
-  // STAT CARDS
+  // PANEL INFORMASI KANAN (Hanya 1 Card Besar Utuh)
   // ═══════════════════════════════════
-  Widget _buildStatCards() {
+  Widget _buildRightInfoPanel() {
     return Obx(() {
-      // Obx di sini karena stat cards bergantung pada data products
-      // yang bisa berubah kapan saja dari Firestore
-      return Row(
-        children: [
-          _statCard(
-            label: 'Total Produk',
-            // toString() = ubah angka jadi teks
-            value: controller.totalProduk.toString(),
-            sub: 'Produk aktif',
-            icon: '📦',
-            // Tidak ada warna khusus = pakai warna default
-          ),
-          const SizedBox(width: 16),
-          _statCard(
-            label: 'Total Stok',
-            value: controller.totalStok.toString(),
-            sub: 'Unit tersedia',
-            icon: '🏷️',
-          ),
-          const SizedBox(width: 16),
-          _statCard(
-            label: 'Stok Menipis',
-            value: controller.produkMenipis.toString(),
-            sub: 'Stok ≤ 5 unit',
-            icon: '⚠️',
-            // Kalau ada produk yang stoknya menipis,
-            // tampilkan warna peringatan
-            valueColor: controller.produkMenipis > 0
-                ? AppTheme.error
-                : AppTheme.textPrimary,
-          ),
-          const SizedBox(width: 16),
-          _statCard(
-            label: 'Stok Habis',
-            value: controller.produkHabis.toString(),
-            sub: 'Perlu restock',
-            icon: '🚫',
-            valueColor: controller.produkHabis > 0
-                ? AppTheme.error
-                : AppTheme.textPrimary,
-          ),
-        ],
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: AppTheme.border),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Judul Utama di dalam Card
+            Text(
+              'Ringkasan Produk',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: AppTheme.textPrimary,
+              ),
+            ),
+            const SizedBox(height: 24),
+
+            // Baris 1: Total Produk
+            _rowInfoItem(
+              label: 'Total Produk',
+              value: controller.totalProduk.toString(),
+            ),
+            const Divider(height: 32, color: AppTheme.border),
+
+            // Baris 2: Total Stok
+            _rowInfoItem(
+              label: 'Total Stok',
+              value: controller.totalStok.toString(),
+            ),
+            const Divider(height: 32, color: AppTheme.border),
+
+            // Baris 3: Stok Menipis
+            _rowInfoItem(
+              label: 'Stok Menipis',
+              value: controller.produkMenipis.toString(),
+
+              valueColor: controller.produkMenipis > 0
+                  ? AppTheme.error
+                  : AppTheme.textPrimary,
+            ),
+            const Divider(height: 32, color: AppTheme.border),
+
+            // Baris 4: Stok Habis
+            _rowInfoItem(
+              label: 'Stok Habis',
+              value: controller.produkHabis.toString(),
+
+              valueColor: controller.produkHabis > 0
+                  ? AppTheme.error
+                  : AppTheme.textPrimary,
+            ),
+          ],
+        ),
       );
     });
   }
 
-  // Widget satu stat card
+  // Widget baris informasi di dalam card utama
+  Widget _rowInfoItem({
+    required String label,
+    required String value,
+
+    Color? valueColor,
+  }) {
+    return Row(
+      children: [
+        // Icon di kiri baris
+
+        // Label Nama Statistik
+        Text(
+          label,
+          style: const TextStyle(fontSize: 14, color: AppTheme.textPrimary),
+        ),
+        const Spacer(),
+
+        // Angka Nilai di Kanan
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: valueColor ?? AppTheme.textPrimary,
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Widget satu stat card (Hapus Expanded internal agar tidak error di dalam Column)
   Widget _statCard({
     required String label,
     required String value,
@@ -113,53 +173,46 @@ class ProdukView extends GetView<ProdukController> {
     required String icon,
     Color? valueColor,
   }) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(14),
-
-          // Border kiri merah = penanda visual
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    label,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: AppTheme.textSecondary,
-                    ),
+    return Container(
+      width: double.infinity, // Memaksa kartu memenuhi lebar panel kanan
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppTheme.border),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: AppTheme.textSecondary,
                   ),
-                  const SizedBox(height: 6),
-                  Text(
-                    value,
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      // valueColor = warna angka, default textPrimary
-                      color: valueColor ?? AppTheme.textPrimary,
-                    ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  value,
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                    color: valueColor ?? AppTheme.textPrimary,
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    sub,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: AppTheme.primary,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  sub,
+                  style: const TextStyle(fontSize: 12, color: AppTheme.primary),
+                ),
+              ],
             ),
-            // Icon besar di kanan, transparan
-            Text(icon, style: const TextStyle(fontSize: 28)),
-          ],
-        ),
+          ),
+          Text(icon, style: const TextStyle(fontSize: 28)),
+        ],
       ),
     );
   }
@@ -174,14 +227,7 @@ class ProdukView extends GetView<ProdukController> {
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: AppTheme.border),
       ),
-      child: Column(
-        children: [
-          // Header section: filter + search
-          // Grid produk
-          _buildSectionHeader(),
-          _buildProdukGrid(),
-        ],
-      ),
+      child: Column(children: [_buildSectionHeader(), _buildProdukGrid()]),
     );
   }
 
@@ -190,13 +236,10 @@ class ProdukView extends GetView<ProdukController> {
       padding: const EdgeInsets.all(20),
       child: Row(
         children: [
-          // Filter kategori — tombol pill
-          // Search bar
-          SizedBox(
-            width: 220,
+          Expanded(
+            flex: 3,
             child: TextField(
               onChanged: controller.onSearch,
-              // onChanged = dipanggil setiap user ketik huruf baru
               style: const TextStyle(fontSize: 13),
               decoration: InputDecoration(
                 hintText: 'Cari produk...',
@@ -233,13 +276,10 @@ class ProdukView extends GetView<ProdukController> {
               ),
             ),
           ),
-
-          SizedBox(width: 20),
-
-          // Filter kategori — tombol pilih kategori
+          const SizedBox(width: 12),
           Obx(
-            () => SizedBox(
-              width: 200,
+            () => Expanded(
+              flex: 2,
               child: DropdownButtonFormField<String>(
                 value: controller.selectedCategory.value,
                 decoration: InputDecoration(
@@ -269,17 +309,15 @@ class ProdukView extends GetView<ProdukController> {
               ),
             ),
           ),
-
-          Spacer(),
-
+          const Spacer(),
           ElevatedButton.icon(
             onPressed: controller.goToTambahProduk,
-            label: Text('Tambah Produk'),
-            icon: Icon(Icons.add),
+            label: const Text('Tambah Produk'),
+            icon: const Icon(Icons.add),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppTheme.primary,
               foregroundColor: AppTheme.primaryLight,
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -292,7 +330,6 @@ class ProdukView extends GetView<ProdukController> {
 
   Widget _buildProdukGrid() {
     return Obx(() {
-      // Tampilkan loading spinner saat data masih dimuat
       if (controller.isLoading.value) {
         return const Padding(
           padding: EdgeInsets.all(60),
@@ -313,7 +350,6 @@ class ProdukView extends GetView<ProdukController> {
 
       final list = controller.filteredProducts;
 
-      // Tampilkan pesan kalau tidak ada produk
       if (list.isEmpty) {
         return Padding(
           padding: const EdgeInsets.all(60),
@@ -333,44 +369,23 @@ class ProdukView extends GetView<ProdukController> {
                     height: 1.6,
                   ),
                 ),
-                const SizedBox(height: 20),
-                ElevatedButton.icon(
-                  onPressed: controller.goToTambahProduk,
-                  icon: const Icon(Icons.add, size: 16),
-                  label: const Text('Tambah Produk Pertama'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.primary,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
         );
       }
 
-      // Tampilkan grid produk
       return Padding(
         padding: const EdgeInsets.all(16),
         child: GridView.builder(
-          // shrinkWrap = GridView hanya setinggi kontennya
-          // tidak mengisi seluruh layar
-          // Diperlukan karena GridView ada di dalam Column
           shrinkWrap: true,
-          // NeverScrollableScrollPhysics = nonaktifkan scroll GridView
-          // biarkan parent (SingleChildScrollView) yang scroll
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 5,
-            // crossAxisCount = jumlah kolom
+            crossAxisCount:
+                4, // Diubah ke 3 atau 4 kolom karena lebar area kiri berkurang
             crossAxisSpacing: 12,
             mainAxisSpacing: 12,
-            childAspectRatio: 0.78,
-            // childAspectRatio = rasio lebar:tinggi tiap kartu
-            // 0.78 = sedikit lebih tinggi dari lebarnya
+            childAspectRatio: 0.75,
           ),
           itemCount: list.length,
           itemBuilder: (context, index) {
@@ -382,10 +397,9 @@ class ProdukView extends GetView<ProdukController> {
   }
 
   // ═══════════════════════════════════
-  // KARTU PRODUK
+  // KARTU PRODUK (Metode ini tetap utuh seperti kode lamamu)
   // ═══════════════════════════════════
   Widget _buildProductCard(ProductModel product) {
-    // Tentukan status stok untuk tampilan badge
     final isHabis = product.stock <= 0;
     final isMenipis = product.stock > 0 && product.stock <= 5;
 
@@ -394,19 +408,15 @@ class ProdukView extends GetView<ProdukController> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          // Border merah kalau stok habis,
-          // border normal kalau stok aman
           color: isHabis ? AppTheme.error.withOpacity(0.3) : AppTheme.border,
         ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Gambar produk
           Expanded(
             child: Stack(
               children: [
-                // Gambar
                 ClipRRect(
                   borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(12),
@@ -416,13 +426,10 @@ class ProdukView extends GetView<ProdukController> {
                           product.imageUrl,
                           width: double.infinity,
                           fit: BoxFit.cover,
-                          // errorBuilder = tampilkan ini kalau gambar gagal load
                           errorBuilder: (_, __, ___) => _placeholderImg(),
                         )
                       : _placeholderImg(),
                 ),
-
-                // Badge status stok di pojok kanan atas
                 Positioned(
                   top: 6,
                   right: 6,
@@ -456,51 +463,41 @@ class ProdukView extends GetView<ProdukController> {
               ],
             ),
           ),
-
-          // Info produk
           Padding(
             padding: const EdgeInsets.fromLTRB(10, 8, 10, 6),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Nama produk
                 Text(
                   product.name,
                   style: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 13,
                     fontWeight: FontWeight.w600,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  // overflow: ellipsis = kalau teks terlalu panjang
-                  // tampilkan "..." di akhir
                 ),
                 const SizedBox(height: 2),
-                // Kategori
                 Text(
                   product.category,
-                  style: const TextStyle(fontSize: 14, color: AppTheme.primary),
+                  style: const TextStyle(fontSize: 13, color: AppTheme.primary),
                 ),
                 const SizedBox(height: 4),
-                // Harga
                 Text(
                   CurrencyFormatter.format(product.price),
                   style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
                     color: AppTheme.textPrimary,
                   ),
                 ),
               ],
             ),
           ),
-
-          // Tombol aksi: Edit dan Hapus
           Padding(
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
             child: Row(
               children: [
-                // Tombol Edit
                 Expanded(
                   child: GestureDetector(
                     onTap: () => controller.goToEditProduk(product),
@@ -524,7 +521,6 @@ class ProdukView extends GetView<ProdukController> {
                   ),
                 ),
                 const SizedBox(width: 6),
-                // Tombol Hapus
                 GestureDetector(
                   onTap: () => controller.goToHapusProduk(product),
                   child: Container(
@@ -553,7 +549,6 @@ class ProdukView extends GetView<ProdukController> {
     );
   }
 
-  // Placeholder gambar kalau tidak ada / gagal load
   Widget _placeholderImg() {
     return Container(
       width: double.infinity,
